@@ -17,13 +17,16 @@ limitations under the License.
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"os"
 	"time"
 
 	"k8s.io/component-base/logs"
+	"k8s.io/klog"
 	"k8s.io/kubernetes/cmd/kube-scheduler/app"
 
+	"sigs.k8s.io/scheduler-plugins/pkg/annotationmatch"
 	"sigs.k8s.io/scheduler-plugins/pkg/capacityscheduling"
 	"sigs.k8s.io/scheduler-plugins/pkg/coscheduling"
 	"sigs.k8s.io/scheduler-plugins/pkg/crossnodepreemption"
@@ -45,6 +48,8 @@ func main() {
 	// Register custom plugins to the scheduler framework.
 	// Later they can consist of scheduler profile(s) and hence
 	// used by various kinds of workloads.
+	fmt.Println("create main from fmt")
+	klog.V(3).Infof("create main")
 	command := app.NewSchedulerCommand(
 		app.WithPlugin(capacityscheduling.Name, capacityscheduling.New),
 		app.WithPlugin(coscheduling.Name, coscheduling.New),
@@ -57,6 +62,9 @@ func main() {
 		app.WithPlugin(crossnodepreemption.Name, crossnodepreemption.New),
 		app.WithPlugin(podstate.Name, podstate.New),
 		app.WithPlugin(qos.Name, qos.New),
+
+		// yts plugins
+		app.WithPlugin(annotationmatch.Name, annotationmatch.New),
 	)
 
 	// TODO: once we switch everything over to Cobra commands, we can go back to calling

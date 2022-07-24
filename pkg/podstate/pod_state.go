@@ -21,8 +21,9 @@ import (
 	"fmt"
 	"math"
 
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/klog"
 	"k8s.io/kubernetes/pkg/scheduler/framework"
 )
 
@@ -98,5 +99,6 @@ func (ps *PodState) NormalizeScore(ctx context.Context, state *framework.CycleSt
 
 // New initializes a new plugin and returns it.
 func New(_ runtime.Object, h framework.Handle) (framework.Plugin, error) {
+	klog.V(3).Infof("create PodState plugin")
 	return &PodState{handle: h}, nil
 }

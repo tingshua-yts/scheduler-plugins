@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pod-state-job
+spec:
+  parallelism: 1
+  template:
+    spec:
+      schedulerName: yts-scheduler
+      containers:
+      - name: pod-state
+        image: busybox
+        command: ["/bin/bash", "-c", "sleep 10"]
+      restartPolicy: Never
+  backoffLimit: 4
